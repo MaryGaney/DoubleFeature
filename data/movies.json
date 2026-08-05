@@ -1,29 +1,3 @@
 {
-  "movies": [
-    {
-      "id": "m_msgo4opgtmix4a",
-      "mediaType": "tmdb",
-      "title": "How to Train Your Dragon 2",
-      "year": "2014",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/d13Uj86LdbDLrfDoHR5aDOFYyJC.jpg",
-      "genres": [
-        "Fantasy",
-        "Action",
-        "Adventure",
-        "Animation",
-        "Family"
-      ],
-      "tmdbId": 82702,
-      "youtubeUrl": null,
-      "addedBy": "Mary",
-      "addedDate": "2026-08-05",
-      "watched": false,
-      "watchedDate": null,
-      "ratings": {
-        "Mary": null,
-        "Angelo": null
-      },
-      "notes": ""
-    }
-  ]
+  "movies": []
 }

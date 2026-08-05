@@ -23,7 +23,7 @@
     <div class="bulb-strip bulb-strip-top" id="bulb-strip-top" aria-hidden="true"></div>
 
     <div class="marquee-inner">
-      <h1 class="marquee-title">Double&nbsp;Feature</h1>
+      <h1 class="marquee-title">Double Feature</h1>
       <p class="marquee-sub">mary &amp; angelo's watchlist</p>
     </div>
 
@@ -228,6 +228,22 @@
         <button type="submit" class="btn btn-primary">Save settings</button>
         <p id="settings-status" class="settings-status" role="status"></p>
       </form>
+
+      <div class="settings-sync">
+        <div class="dash-section-title">Move these to another device</div>
+        <p class="view-sub" style="margin-bottom:14px;">
+          Set these up once, then send them to your other device instead of retyping — the link/file
+          contain your tokens, so only send them somewhere private (AirDrop, a message to yourself, etc).
+        </p>
+        <div class="settings-sync-actions">
+          <button type="button" class="btn btn-secondary" id="copy-setup-link-btn">📋 Copy setup link</button>
+          <button type="button" class="btn btn-secondary" id="export-settings-btn">⬇️ Export to file</button>
+          <label class="btn btn-secondary" for="import-settings-input" style="cursor:pointer;">
+            ⬆️ Import from file
+            <input type="file" id="import-settings-input" accept="application/json" hidden>
+          </label>
+        </div>
+      </div>
 
       <details class="settings-help">
         <summary>Where do I get these?</summary>

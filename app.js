@@ -89,6 +89,7 @@
     }[c]));
   }
   function utf8ToBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function base64ToUtf8(b64) { return decodeURIComponent(escape(atob(b64))); }
   function movieAvg(m) { return avg([m.ratings && m.ratings.Mary, m.ratings && m.ratings.Angelo]); }
   function genreMapFor(kind) { return kind === "tv" ? GENRE_MAP_TV : GENRE_MAP; }
 
@@ -857,10 +858,90 @@
     setTimeout(() => { statusEl.textContent = ""; }, 2000);
   });
 
+  // --- move settings to another device: link, file export, file import ---
+  function hasSavedSettings() { return !!(settings.ghToken || settings.tmdbToken); }
+
+  document.getElementById("copy-setup-link-btn").addEventListener("click", async () => {
+    if (!hasSavedSettings()) { toast("Fill in and save settings first"); return; }
+    const payload = utf8ToBase64(JSON.stringify(settings));
+    const link = `${window.location.origin}${window.location.pathname}#setup=${encodeURIComponent(payload)}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      toast("Link copied — open it on your other device");
+    } catch (e) {
+      window.prompt("Copy this link:", link);
+    }
+  });
+
+  document.getElementById("export-settings-btn").addEventListener("click", () => {
+    if (!hasSavedSettings()) { toast("Fill in and save settings first"); return; }
+    const blob = new Blob([JSON.stringify(settings, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "double-feature-settings.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast("Settings file downloaded");
+  });
+
+  document.getElementById("import-settings-input").addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const decoded = JSON.parse(reader.result);
+        settings = {
+          tmdbToken: decoded.tmdbToken || "",
+          ghToken: decoded.ghToken || "",
+          owner: decoded.owner || "",
+          repo: decoded.repo || "",
+          branch: decoded.branch || "main",
+        };
+        saveSettings(settings);
+        fillSettingsForm();
+        toast("Settings imported ✓");
+      } catch (err) {
+        toast("Couldn't read that file");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
+  function checkForSetupLink() {
+    const match = window.location.hash.match(/#setup=([^&]+)/);
+    if (!match) return;
+    try {
+      const decoded = JSON.parse(base64ToUtf8(decodeURIComponent(match[1])));
+      const summary = decoded.owner && decoded.repo ? `${decoded.owner}/${decoded.repo}` : "this repo";
+      if (window.confirm(`This link has setup info for ${summary}. Save it to this browser's Settings?`)) {
+        settings = {
+          tmdbToken: decoded.tmdbToken || "",
+          ghToken: decoded.ghToken || "",
+          owner: decoded.owner || "",
+          repo: decoded.repo || "",
+          branch: decoded.branch || "main",
+        };
+        saveSettings(settings);
+        fillSettingsForm();
+        toast("Settings saved from link ✓");
+      }
+    } catch (e) {
+      console.error("Bad setup link", e);
+    }
+    // strip the hash either way so tokens don't linger in the URL/history
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
   /* ---------------------------------------------------------
      INIT
      --------------------------------------------------------- */
   updateCompletionFieldsVisibility();
   fillSettingsForm();
+  checkForSetupLink();
   loadMovies();
 })();

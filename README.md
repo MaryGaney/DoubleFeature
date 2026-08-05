@@ -54,6 +54,15 @@ Each person can save their own token in their own browser — there's nothing to
 
 **Heads up:** this token lives in `localStorage` in your browser, not anywhere more secure than that. That's a fine tradeoff for a two-person personal project on a token scoped to just this repo, but don't reuse a broad/all-repo token here.
 
+### Moving your settings to a second device
+
+Once one of you has Settings filled in on one device, the Settings tab has three ways to get it onto another device without retyping two long tokens on a phone keyboard:
+
+- **📋 Copy setup link** — copies a link with your settings baked into it. Open it on your other device (send it to yourself via a private channel — Messages, AirDrop, email to yourself) and it'll ask to save those settings to that browser, then scrub itself from the address bar and history.
+- **⬇️ Export to file / ⬆️ Import from file** — downloads a small `.json` file with your settings, which you can AirDrop/send to your other device and import there.
+
+Both contain your actual tokens in plain text, so treat them like a password — don't post the link or file anywhere public. There's no way to make this fully automatic without a backend server, which this project intentionally doesn't have; this gets it down to one tap instead of retyping.
+
 ## 5. Restyling
 
 Everything visual lives in `style.css`. The **TOKENS** section at the very top of the file has two blocks of CSS variables — one for dark theme (default), one for `[data-theme="light"]` — change a value there and it updates everywhere. Sections below are organized by component (header/marquee, nav, cards, modal, dashboard, etc.) and commented.

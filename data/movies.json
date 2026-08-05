@@ -23,7 +23,16 @@
         "Mary": null,
         "Angelo": null
       },
-      "notes": ""
+      "notes": "",
+      "rewatchFor": {
+        "Mary": false,
+        "Angelo": false
+      },
+      "tv": {
+        "season": null,
+        "episode": null
+      },
+      "status": "unwatched"
     }
   ]
 }

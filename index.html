@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Double Feature — Mary &amp; Angelo's Watchlist</title>
+<meta name="theme-color" content="#1B1F3B">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎟️</text></svg>">
+
+<!-- Fonts: Fraunces (display), Work Sans (body), IBM Plex Mono (ticket/meta) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="marquee">
+    <div class="marquee-inner">
+      <h1 class="marquee-title">Double&nbsp;Feature</h1>
+      <p class="marquee-sub">mary &amp; angelo's watchlist</p>
+    </div>
+    <button class="icon-btn settings-trigger" data-view-target="view-settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.55V19.5a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.88 1.7 1.7 0 0 0-1.55-1H4.5a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.88.34H10.5a1.7 1.7 0 0 0 1-1.55V4.5a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.88V10.5a1.7 1.7 0 0 0 1.55 1H19.5a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>
+    </button>
+  </header>
+
+  <main>
+
+    <!-- ===================== VIEW: WATCHLIST ===================== -->
+    <section id="view-watchlist" class="view is-active" aria-label="Watchlist">
+
+      <div class="filter-bar">
+        <div class="seg-control" role="tablist" aria-label="Filter by status">
+          <button class="seg-btn is-active" data-filter="status" data-value="all">All</button>
+          <button class="seg-btn" data-filter="status" data-value="unwatched">To watch</button>
+          <button class="seg-btn" data-filter="status" data-value="watched">Watched</button>
+        </div>
+
+        <div class="filter-row">
+          <label class="select-wrap">
+            <span class="select-label">Added by</span>
+            <select id="filter-addedby">
+              <option value="all">Everyone</option>
+              <option value="Mary">Mary</option>
+              <option value="Angelo">Angelo</option>
+            </select>
+          </label>
+
+          <label class="select-wrap">
+            <span class="select-label">Sort</span>
+            <select id="filter-sort">
+              <option value="recent">Recently added</option>
+              <option value="rating-desc">Highest rated</option>
+              <option value="rating-asc">Lowest rated</option>
+              <option value="title">Title A–Z</option>
+              <option value="watched-date">Recently watched</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div id="watchlist-count" class="list-count"></div>
+      <div id="watchlist-grid" class="ticket-grid"></div>
+      <div id="watchlist-empty" class="empty-state" hidden></div>
+    </section>
+
+    <!-- ===================== VIEW: DASHBOARD ===================== -->
+    <section id="view-dashboard" class="view" aria-label="Dashboard">
+      <h2 class="view-heading">The Numbers</h2>
+      <div id="dashboard-content"></div>
+    </section>
+
+    <!-- ===================== VIEW: ADD ===================== -->
+    <section id="view-add" class="view" aria-label="Add a movie">
+      <h2 class="view-heading">Add to the List</h2>
+
+      <div class="addedby-picker" role="group" aria-label="Who's adding this">
+        <button class="addedby-option" data-who="Mary" type="button">🎟️ Mary</button>
+        <button class="addedby-option" data-who="Angelo" type="button">🎟️ Angelo</button>
+      </div>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="backfill-checkbox">
+        <span>We already watched this (log a past watch)</span>
+      </label>
+
+      <div class="backfill-fields" id="backfill-fields">
+        <label class="field">
+          <span>Date watched</span>
+          <input type="date" id="backfill-watched-date">
+        </label>
+        <div class="rater">
+          <div class="rater-label"><span class="rater-dot is-mary"></span> Mary's rating</div>
+          <div class="star-row" id="backfill-stars-Mary" data-who="Mary"></div>
+        </div>
+        <div class="rater">
+          <div class="rater-label"><span class="rater-dot is-angelo"></span> Angelo's rating</div>
+          <div class="star-row" id="backfill-stars-Angelo" data-who="Angelo"></div>
+        </div>
+        <label class="field">
+          <span>Date added to list <em>(optional — defaults to watched date)</em></span>
+          <input type="date" id="backfill-added-date">
+        </label>
+      </div>
+
+      <div class="seg-control" role="tablist" aria-label="How to add">
+        <button class="seg-btn is-active" data-addmode="tmdb">Search</button>
+        <button class="seg-btn" data-addmode="youtube">YouTube</button>
+        <button class="seg-btn" data-addmode="other">Other</button>
+      </div>
+
+      <!-- Search TMDB -->
+      <div class="add-panel is-active" data-panel="tmdb">
+        <div class="search-row">
+          <input type="text" id="tmdb-search-input" placeholder="Search for a title…" autocomplete="off">
+        </div>
+        <div id="tmdb-results" class="tmdb-results"></div>
+      </div>
+
+      <!-- YouTube -->
+      <div class="add-panel" data-panel="youtube">
+        <label class="field">
+          <span>YouTube link</span>
+          <input type="url" id="youtube-url-input" placeholder="https://youtube.com/watch?v=…">
+        </label>
+        <button class="btn btn-secondary" id="youtube-fetch-btn" type="button">Look it up</button>
+        <div id="youtube-preview"></div>
+      </div>
+
+      <!-- Other / untracked media -->
+      <div class="add-panel" data-panel="other">
+        <label class="field">
+          <span>Title</span>
+          <input type="text" id="other-title-input" placeholder="What is it?">
+        </label>
+        <label class="field">
+          <span>Poster / image URL <em>(optional)</em></span>
+          <input type="url" id="other-poster-input" placeholder="https://…">
+        </label>
+        <button class="btn btn-primary" id="other-add-btn" type="button">Add to list</button>
+      </div>
+    </section>
+
+    <!-- ===================== VIEW: SETTINGS ===================== -->
+    <section id="view-settings" class="view" aria-label="Settings">
+      <h2 class="view-heading">Settings</h2>
+      <p class="view-sub">These stay in this browser only — never committed to the repo.</p>
+
+      <form id="settings-form" class="settings-form">
+        <label class="field">
+          <span>TMDB API Read Access Token</span>
+          <input type="password" id="setting-tmdb-token" autocomplete="off" placeholder="eyJhbGciOi…">
+        </label>
+        <label class="field">
+          <span>GitHub personal access token</span>
+          <input type="password" id="setting-gh-token" autocomplete="off" placeholder="github_pat_…">
+        </label>
+        <label class="field">
+          <span>Repo owner</span>
+          <input type="text" id="setting-owner" autocomplete="off" placeholder="e.g. angelo123">
+        </label>
+        <label class="field">
+          <span>Repo name</span>
+          <input type="text" id="setting-repo" autocomplete="off" placeholder="e.g. double-feature">
+        </label>
+        <label class="field">
+          <span>Branch</span>
+          <input type="text" id="setting-branch" autocomplete="off" placeholder="main" value="main">
+        </label>
+        <button type="submit" class="btn btn-primary">Save settings</button>
+        <p id="settings-status" class="settings-status" role="status"></p>
+      </form>
+
+      <details class="settings-help">
+        <summary>Where do I get these?</summary>
+        <ol>
+          <li><strong>TMDB token:</strong> themoviedb.org → Settings → API → request a key → copy the "API Read Access Token".</li>
+          <li><strong>GitHub token:</strong> github.com → Settings → Developer settings → Personal access tokens → Fine-grained → give it read/write access to <em>Contents</em> on this repo only.</li>
+          <li><strong>Owner / repo:</strong> from your repo URL — github.com/<em>owner</em>/<em>repo</em>.</li>
+        </ol>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- ===================== BOTTOM NAV ===================== -->
+  <nav class="bottom-nav" aria-label="Primary">
+    <button class="nav-btn is-active" data-view="view-watchlist">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1a1.5 1.5 0 0 0 0 3v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a1.5 1.5 0 0 0 0-3Z"/><path d="M9 6v12" stroke-dasharray="2 2"/></svg>
+      <span>Watchlist</span>
+    </button>
+    <button class="nav-btn" data-view="view-dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M11 20V4M18 20v-7"/></svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-btn" data-view="view-add">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      <span>Add</span>
+    </button>
+  </nav>
+
+</div>
+
+<div id="modal-root"></div>
+
+<script src="app.js" defer></script>
+</body>
+</html>

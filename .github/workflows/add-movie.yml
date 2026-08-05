@@ -1,0 +1,57 @@
+name: Add movie from issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add-movie:
+    if: contains(github.event.issue.labels.*.name, 'add-movie')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Parse issue and update watchlist
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
+        run: node scripts/add-movie-from-issue.js
+
+      - name: Commit and push
+        run: |
+          git config user.name "double-feature-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/movies.json
+          git diff --cached --quiet || git commit -m "Add movie via issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Comment on issue and close if successful
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const result = JSON.parse(fs.readFileSync('add-result.json', 'utf8'));
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: result.message,
+            });
+            if (result.success) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed',
+              });
+            }

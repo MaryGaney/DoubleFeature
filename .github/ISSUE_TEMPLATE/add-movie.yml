@@ -1,0 +1,37 @@
+name: 🎬 Add a movie
+description: Quickly add a movie to the Double Feature watchlist — works great from the GitHub mobile app.
+title: "[Add] "
+labels: ["add-movie"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Movie title
+      placeholder: e.g. Chinatown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: added_by
+    attributes:
+      label: Who's adding this?
+      options:
+        - Mary
+        - Angelo
+    validations:
+      required: true
+
+  - type: input
+    id: year
+    attributes:
+      label: Release year
+      description: Optional — helps pick the right movie if there are remakes/multiple matches.
+      placeholder: e.g. 1974
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional — why you want to watch it, who recommended it, etc.
+    validations:
+      required: false

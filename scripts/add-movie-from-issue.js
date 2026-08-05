@@ -54,6 +54,7 @@ async function main() {
   const movie = {
     id: uid(),
     mediaType: "other",
+    mediaKind: "movie",
     title,
     year: year || null,
     posterUrl: null,
@@ -62,9 +63,11 @@ async function main() {
     youtubeUrl: null,
     addedBy,
     addedDate: new Date().toISOString().slice(0, 10),
-    watched: false,
+    status: "unwatched",
     watchedDate: null,
     ratings: { Mary: null, Angelo: null },
+    rewatchFor: { Mary: false, Angelo: false },
+    tv: { season: null, episode: null },
     notes: notes || "",
   };
 

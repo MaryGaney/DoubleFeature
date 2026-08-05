@@ -3,10 +3,13 @@
 A small shared watchlist for two people. Static site, hosted free on GitHub
 Pages, no backend — data lives in `data/movies.json` in this repo.
 
-- **Watchlist** — ticket-style cards, filter by watched/unwatched, who added it, sort by rating
-- **Dashboard** — how many watched, when, average rating per person, top genres
-- **Add** — search TMDB for posters/genres, or add a YouTube link, or add anything else untracked; can log something you watched weeks ago with a backdated rating
-- **Quick add from your phone** — open a GitHub Issue from the mobile app and a GitHub Action adds it to the list automatically
+- **Watchlist** — retro ticket-stub cards, filter by status/added-by/genre/familiarity, sort by rating
+- **Dashboard** — finished/watching/on-the-list counts, average rating per person, finished-over-time and ratings-over-time charts, top genres, who's adding what
+- **Add** — search TMDB for movies *or* TV shows (posters/genres included), or add a YouTube link, or add anything else untracked; can log something watched weeks ago with a backdated rating
+- **Rewatches** — mark that a title is a rewatch for Mary, Angelo, or both, and filter the list by who's already seen what
+- **TV shows** — track season/episode progress and a Watching/Finished status separate from movies
+- **Light & dark themes** — toggle in the header, remembers your choice
+- **Quick add from your phone** — open a GitHub Issue from the mobile app and a GitHub Action adds the movie automatically
 
 ---
 
@@ -20,7 +23,7 @@ Pages, no backend — data lives in `data/movies.json` in this repo.
 
 1. Go to [themoviedb.org](https://www.themoviedb.org) → create an account.
 2. **Settings → API** → request a key (choose "Developer", fill in anything reasonable for the app details).
-3. Copy the **"API Read Access Token"** (long string starting with `eyJ...`) — that's what the site uses.
+3. Copy the **"API Read Access Token"** (long string starting with `eyJ...`) — that's what the site uses. It works for both the movie and TV search.
 
 You'll paste this into the site's **Settings** tab once it's live (stored only in your browser).
 
@@ -33,6 +36,9 @@ This lets you open the GitHub app on your phone → Issues → new issue → fil
    (Without this secret, quick-add issues still work — they just add the title without a poster/genres, and you can fill those in later from the site.)
 2. That's it — `.github/workflows/add-movie.yml` and the issue form in `.github/ISSUE_TEMPLATE/add-movie.yml` are already wired up.
 3. To add a movie: **GitHub app → your repo → Issues → +  → "🎬 Add a movie"** → fill in the title and who's adding it → Submit. The Action searches TMDB, commits the movie to `data/movies.json`, comments on the issue confirming, and closes it. Give it 10–20 seconds.
+4. This quick-add path is **movies only** for now — it keeps the Action simple. Add TV shows from the site's Add tab instead, where you can also set season/episode progress.
+
+**Why does tapping the issue template open Chrome instead of a native screen?** This is a GitHub mobile app limitation, not something in this project's code. Issue Forms (the YAML forms with dropdowns/validation, like `add-movie.yml`) aren't rendered natively in the GitHub app yet, so the app hands off to the in-app browser to show the web version of the form. It still works exactly the same — same fields, same one-tap submit, and the Action still fires — it's just a browser tab instead of a native screen. If GitHub adds native Issue Forms support later this will resolve itself automatically. In the meantime, bookmarking or adding this link to your phone's home screen gets you there in one tap: `https://github.com/<owner>/<repo>/issues/new?template=add-movie.yml`.
 
 ## 4. Let the site write back to GitHub (for ratings, watched status, adding from the site itself)
 
@@ -50,7 +56,11 @@ Each person can save their own token in their own browser — there's nothing to
 
 ## 5. Restyling
 
-Everything visual lives in `style.css`. The **TOKENS** section at the very top of the file has all the colors and fonts as CSS variables — change a value there and it updates everywhere. Sections below are organized by component (header, nav, cards, modal, dashboard, etc.) and commented.
+Everything visual lives in `style.css`. The **TOKENS** section at the very top of the file has two blocks of CSS variables — one for dark theme (default), one for `[data-theme="light"]` — change a value there and it updates everywhere. Sections below are organized by component (header/marquee, nav, cards, modal, dashboard, etc.) and commented.
+
+The current palette is built from: Vanilla Cream `#faf3dd`, Tea Green `#c8d5b9`, Muted Teal `#8fc0a9`, Tropical Teal `#68b0ab`, and Jungle Teal `#4a7c59` — ticket cards stay cream in both themes, while the page background/nav swap between a soft tea-green wash (light) and a near-black jungle teal (dark, for that lit-up drive-in look). Mary's coral and Angelo's teal are the two "person" accents, used consistently for their tags and ratings everywhere.
+
+The glowing marquee title and the twinkling bulb strip are the site's signature visual — both are pure CSS/SVG (no images), driven by the `--color-glow`, `--color-glow-strong`, and `--color-accent` variables, so restyling the palette automatically restyles the glow too.
 
 ## How the data is structured
 
@@ -62,6 +72,7 @@ Everything visual lives in `style.css`. The **TOKENS** section at the very top o
     {
       "id": "m_abc123",
       "mediaType": "tmdb",        // "tmdb" | "youtube" | "other"
+      "mediaKind": "movie",       // "movie" | "tv"
       "title": "Chinatown",
       "year": "1974",
       "posterUrl": "https://image.tmdb.org/t/p/w342/...jpg",
@@ -70,9 +81,11 @@ Everything visual lives in `style.css`. The **TOKENS** section at the very top o
       "youtubeUrl": null,
       "addedBy": "Angelo",        // "Mary" | "Angelo"
       "addedDate": "2026-07-01",
-      "watched": true,
+      "status": "finished",       // "unwatched" | "watching" | "finished"
       "watchedDate": "2026-07-10",
       "ratings": { "Mary": 5, "Angelo": 4 },
+      "rewatchFor": { "Mary": false, "Angelo": true },  // true = they'd already seen it before
+      "tv": { "season": null, "episode": null },        // only meaningful when mediaKind is "tv"
       "notes": ""
     }
   ]
@@ -83,4 +96,6 @@ Everything visual lives in `style.css`. The **TOKENS** section at the very top o
 
 - No login/auth — anyone with the repo URL can view the site, and anyone with a write-scoped token can edit. Fine for a private two-person project; don't put anything sensitive in it.
 - No conflict resolution if you both edit at the exact same moment — last write wins. In practice, for a couple adding/rating movies, this basically never comes up.
-- Quick-add issues always create an `"other"`-type entry if no TMDB match is found or `TMDB_TOKEN` isn't set — you can search-and-fix it from the site's card later, or just leave it (untracked entries display and filter fine either way).
+- Quick-add issues always create a movie `"other"`-type entry if no TMDB match is found or `TMDB_TOKEN` isn't set — you can search-and-fix it from the site's card later, or just leave it (untracked entries display and filter fine either way).
+- Quick-add issues don't support TV shows — add those from the site so you can set season/episode.
+

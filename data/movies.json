@@ -1,3 +1,35 @@
 {
-  "movies": []
+  "movies": [
+    {
+      "id": "m_mshwgbbvnqbdt1",
+      "mediaType": "tmdb",
+      "mediaKind": "tv",
+      "title": "Brooklyn Nine-Nine",
+      "year": "2013",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/mpjlDzVjp7oyHUe2LaF9ltKe6f1.jpg",
+      "genres": [
+        "Comedy",
+        "Crime"
+      ],
+      "tmdbId": 48891,
+      "youtubeUrl": null,
+      "addedBy": "Mary",
+      "addedDate": "2026-08-06",
+      "status": "unwatched",
+      "watchedDate": null,
+      "ratings": {
+        "Mary": null,
+        "Angelo": null
+      },
+      "rewatchFor": {
+        "Mary": false,
+        "Angelo": false
+      },
+      "tv": {
+        "season": null,
+        "episode": null
+      },
+      "notes": ""
+    }
+  ]
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Double Feature — Mary &amp; Angelo's Watchlist</title>
+<title>Double Feature: Mary &amp; Angelo's Watchlist</title>
 <meta name="theme-color" content="#0F1A14">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎟️</text></svg>">
 
@@ -108,13 +108,13 @@
       <h2 class="view-heading">Add to the List</h2>
 
       <div class="addedby-picker" role="group" aria-label="Who's adding this">
-        <button class="addedby-option" data-who="Mary" type="button">🎟️ Mary</button>
-        <button class="addedby-option" data-who="Angelo" type="button">🎟️ Angelo</button>
+        <button class="addedby-option" data-who="Mary" type="button">Mary</button>
+        <button class="addedby-option" data-who="Angelo" type="button">Angelo</button>
       </div>
 
       <div class="seg-control" role="tablist" aria-label="Movie or TV show">
-        <button class="seg-btn is-active" data-mediakind="movie" type="button">🎬 Movie</button>
-        <button class="seg-btn" data-mediakind="tv" type="button">📺 TV Show</button>
+        <button class="seg-btn is-active" data-mediakind="movie" type="button">Movie</button>
+        <button class="seg-btn" data-mediakind="tv" type="button">TV Show</button>
       </div>
 
       <div class="rewatch-row">
@@ -139,7 +139,7 @@
 
       <label class="checkbox-row" id="backfill-checkbox-row">
         <input type="checkbox" id="backfill-checkbox">
-        <span>We already watched this (log a past watch)</span>
+        <span>We already watched this</span>
       </label>
 
       <div class="backfill-fields" id="backfill-fields">
@@ -156,7 +156,7 @@
           <div class="star-row" id="backfill-stars-Angelo"></div>
         </div>
         <label class="field">
-          <span>Date added to list <em>(optional — defaults to watched date)</em></span>
+          <span>Date added to list <em>(optional - defaults to watched date)</em></span>
           <input type="date" id="backfill-added-date">
         </label>
       </div>
@@ -202,7 +202,7 @@
     <!-- ===================== VIEW: SETTINGS ===================== -->
     <section id="view-settings" class="view" aria-label="Settings">
       <h2 class="view-heading">Settings</h2>
-      <p class="view-sub">These stay in this browser only — never committed to the repo.</p>
+      <p class="view-sub">These stay in this browser only - never committed to the repo.</p>
 
       <form id="settings-form" class="settings-form">
         <label class="field">
@@ -232,14 +232,14 @@
       <div class="settings-sync">
         <div class="dash-section-title">Move these to another device</div>
         <p class="view-sub" style="margin-bottom:14px;">
-          Set these up once, then send them to your other device instead of retyping — the link/file
+          Set these up once, then send them to your other device instead of retyping: the link/file
           contain your tokens, so only send them somewhere private (AirDrop, a message to yourself, etc).
         </p>
         <div class="settings-sync-actions">
-          <button type="button" class="btn btn-secondary" id="copy-setup-link-btn">📋 Copy setup link</button>
-          <button type="button" class="btn btn-secondary" id="export-settings-btn">⬇️ Export to file</button>
+          <button type="button" class="btn btn-secondary" id="copy-setup-link-btn">Copy setup link</button>
+          <button type="button" class="btn btn-secondary" id="export-settings-btn">⬇Export to file</button>
           <label class="btn btn-secondary" for="import-settings-input" style="cursor:pointer;">
-            ⬆️ Import from file
+            Import from file
             <input type="file" id="import-settings-input" accept="application/json" hidden>
           </label>
         </div>
@@ -250,7 +250,7 @@
         <ol>
           <li><strong>TMDB token:</strong> themoviedb.org → Settings → API → request a key → copy the "API Read Access Token".</li>
           <li><strong>GitHub token:</strong> github.com → Settings → Developer settings → Personal access tokens → Fine-grained → give it read/write access to <em>Contents</em> on this repo only.</li>
-          <li><strong>Owner / repo:</strong> from your repo URL — github.com/<em>owner</em>/<em>repo</em>.</li>
+          <li><strong>Owner / repo:</strong> from your repo URL: github.com/<em>owner</em>/<em>repo</em>.</li>
         </ol>
       </details>
     </section>

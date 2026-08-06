@@ -1,6 +1,38 @@
 {
   "movies": [
     {
+      "id": "m_mshwbs95v1othy",
+      "mediaType": "tmdb",
+      "mediaKind": "movie",
+      "title": "How to Train Your Dragon: The Hidden World",
+      "year": "2019",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/xvx4Yhf0DVH8G4LzNISpMfFBDy2.jpg",
+      "genres": [
+        "Animation",
+        "Family",
+        "Adventure"
+      ],
+      "tmdbId": 166428,
+      "youtubeUrl": null,
+      "addedBy": "Mary",
+      "addedDate": "2026-08-06",
+      "status": "unwatched",
+      "watchedDate": null,
+      "ratings": {
+        "Mary": null,
+        "Angelo": null
+      },
+      "rewatchFor": {
+        "Mary": false,
+        "Angelo": false
+      },
+      "tv": {
+        "season": null,
+        "episode": null
+      },
+      "notes": ""
+    },
+    {
       "id": "m_mshw1lqyggpz3h",
       "mediaType": "tmdb",
       "mediaKind": "movie",
